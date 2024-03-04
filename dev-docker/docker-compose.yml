@@ -1,0 +1,10 @@
+version: "3"
+
+services:
+    timeseries-etl:
+        container_name: ts-etl-dev
+        build:
+            context: ../
+            dockerfile: ./dev-docker/Dockerfile
+        volumes:
+            - ../:/app
