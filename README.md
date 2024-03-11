@@ -1,17 +1,10 @@
-# Template for Python-based apps
+# ETL service for HomeLab
 
-# MVP
+## Roadmap
 - dev container
 - pre-commit, including black
-- pytest
-- TDD
-
-# Dev Setup
-1. Copy template to new directory
-2. Rename container_name in ./dev-docker/docker-compose.yml
-3. Initialise git (git init)
-4. Push to new GH repo
-5. Run dev-docker to setup dev environment
-
-# Deployment
-1. ???
+- ETL for BOM
+- pytest -> TDD
+- webhook endpoint/MQTT server for edge devices
+- tinyflux db maintenance (remove duplicate points)
+- CI/CD pipeline
