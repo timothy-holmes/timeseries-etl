@@ -1,15 +1,15 @@
 from queue import Queue
 import threading
 
-from tinyflux import TinyFlux
-
-from config import Config
+from tinyflux import TinyFlux, Point
 
 
 class Engine:
     def __init__(self, tinyflux_path):
         self._tinyflux_path = tinyflux_path
         self.queue = Queue()
+        self._worker_thread = None
+        self._exit_worker = False
 
     def _start_worker(self):
         self.exit_worker = False
@@ -19,7 +19,8 @@ class Engine:
 
     def _stop_worker(self):
         self.exit_worker = True
-        self.worker_thread.join()
+        if self.worker_thread:
+            self.worker_thread.join()
         return True
 
     def _worker(self):
@@ -28,6 +29,18 @@ class Engine:
                 if not self.queue.empty():
                     item = self.queue.get()
                     db.insert(item)
+
+    def _worker_alive(self):
+        if self.worker_thread:
+            return self.worker_thread.is_alive()
+        else:
+            return False
+
+    def queue_size(self):
+        return self.queue.qsize()
+
+    def insert(self, item: Point):
+        self.queue.put(item)
 
     def close(self):
         self._stop_worker()
