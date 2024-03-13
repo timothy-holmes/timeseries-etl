@@ -6,9 +6,16 @@ Exhaustive data pipeline for projects. Integates self-hosted healthchecks/job no
 
 ## Roadmap
 - dev container (fix git commit issue)
-- pre-commit, including black (done)
-- ETL for BOM (done)
+- pre-commit (not working with environment)
+- black
+- flake8
 - pytest -> TDD (need to add pyproject.toml with pytest pythonpath entry)
-- webhook endpoint/MQTT server for edge devices (waiting for zigbee bridge to arrive)
+- integrations:
+    - BoM
+    - P110 power usage
+    - MQTT broker
+    - Zigbee devices: temperature and humidity, air quality (via MQTT)
+    - Shelly H&T (via MQTT)
+    - solar power production
 - tinyflux db maintenance ie. backup and remove duplicate points
 - CI/CD pipeline
