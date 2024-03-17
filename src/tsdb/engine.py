@@ -1,6 +1,5 @@
 from queue import Queue, Empty
 import threading
-import time
 
 from tinyflux import TinyFlux, Point
 
@@ -47,4 +46,3 @@ class Engine:
 
     def insert(self, item: Point):
         self._queue.put(item)
-

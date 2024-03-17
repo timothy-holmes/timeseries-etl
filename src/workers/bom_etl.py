@@ -50,22 +50,18 @@ class ExtractorBOM:
     ]
 
     @classmethod
-    def get_observations(cls):
-        observations = [
-            obs
-            for site in cls.SITES
-            for obs in requests.get(
-                site["url"], headers=cls.PARAMS["headers"], params=cls.PARAMS["cookies"]
+    def get_site_observations(cls, url) -> list[dict]:
+        return (
+            requests.get(
+                url, headers=cls.PARAMS["headers"], params=cls.PARAMS["cookies"]
             )
             .json()
             .get("observations")
             .get("data")
-        ]
-
-        return [cls.ob_to_point(ob) for ob in observations]
+        )
 
     @staticmethod
-    def ob_to_point(ob):
+    def ob_to_point(ob) -> Point:
         # Datetime object that is "timezone-aware".
         ts = datetime.datetime.strptime(ob["local_date_time_full"], "%Y%m%d%H%M%S")
 
@@ -80,11 +76,16 @@ class ExtractorBOM:
 
         # Initialize the Point with the above attributes.
         return Point(
-            measurement='climate',
+            measurement="climate",
             time=ts,
             tags=tags,
             fields=fields,
         )
 
+    @classmethod
+    def get_points(cls) -> list[Point]:
+        observations = [
+            obs for site in cls.SITES for obs in cls.get_site_observations(site["url"])
+        ]
 
-
+        return [cls.ob_to_point(ob) for ob in observations]

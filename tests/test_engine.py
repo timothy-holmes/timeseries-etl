@@ -7,22 +7,21 @@ from tinyflux import Point
 
 from tsdb.engine import Engine
 
+
 def temp_tinyflux_path():
-    r = ''.join(
-        random.choices(
-            string.ascii_lowercase + string.digits, 
-            k=8
-        )
-    )
+    r = "".join(random.choices(string.ascii_lowercase + string.digits, k=8))
     return f"./tests/data/{r}-temp.db"
 
 
 def test_worker_starts_and_stops():
     engine = Engine(temp_tinyflux_path())
     engine.start_worker()
+    time.sleep(1)
     assert engine._is_worker_alive() is True
     engine.stop_worker()
+    time.sleep(1)
     assert engine._is_worker_alive() is False
+
 
 def test_insert_and_queue_size():
     engine = Engine(temp_tinyflux_path())
@@ -52,29 +51,37 @@ def test_insert_and_queue_size():
     engine.stop_worker()
 
 
-def test_close():
-    engine = Engine(temp_tinyflux_path())
-    engine.start_worker()
-    assert engine._is_worker_alive() is True
-    engine.stop_worker()
-    assert engine._is_worker_alive() is False
-
-
 def test_performance():
-    pre = time.time()
+    # wait until end of other tests
+    time.sleep(10)
+    num_points = 1000
+
+    # setup timing
+    prework_start = time.time()
     engine = Engine(temp_tinyflux_path())
     engine.start_worker()
-    points = [Point(
-        time=datetime.now() + timedelta(seconds=i),
-        measurement="measurement2",
-        tags={"tag2": "value2"},
-        fields={"field2": random.randint(0, 100)},
-    ) for i in range(1000)]
-    pre_end = time.time() - pre
+    prework_result = time.time() - prework_start
+
+    # create random points
+    points = [
+        Point(
+            time=datetime.now() + timedelta(seconds=i),
+            measurement="measurement2",
+            tags={"tag2": "value2"},
+            fields={"field2": random.randint(0, 100)},
+        )
+        for i in range(num_points)
+    ]
+
+    # insert points
+    insertion_start = time.time()
     for point in points:
         engine.insert(point)
     while engine.queue_size() > 0:
         time.sleep(0.1)
-    end = time.time() - pre
+    insertion_end = time.time() - insertion_start
     engine.stop_worker()
-    assert False, f'{pre} {pre_end}, {end}'
+    assert prework_result < 0.5, "TinyFlux engine not fast enough starting up"
+    assert (
+        insertion_end < 50
+    ), f"TinyFlux engine not fast enough inserting {num_points} points"
