@@ -1,3 +1,23 @@
+[project]
+name = "etl-timeseries"
+authors = [
+    {name = "Timothy Holmes", email = "tim.a.holmes@gmail.com"}
+]
+readme = "README.md"
+requires-python = ">=3.10"
+classifiers = ["License :: OSI Approved :: MIT License"]
+dependencies = [
+    "schedule==1.2.1",
+    "requests==2.31.0"
+]
+version = "0.0.1"
+
+[project.optional-dependencies]
+dev = [
+    "pytest"
+]
+
+
 [tool.pytest.ini_options]
 addopts = [
     "--import-mode=importlib"

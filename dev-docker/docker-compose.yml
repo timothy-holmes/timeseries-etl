@@ -8,3 +8,6 @@ services:
             dockerfile: ./dev-docker/Dockerfile
         volumes:
             - ../:/app
+        command: bash -c "pip install .[dev] && pip uninstall -y etl_timeseries && tail -f /dev/null"
+        tty: true
+

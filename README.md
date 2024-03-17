@@ -4,6 +4,21 @@
 
 Exhaustive data pipeline for projects. Integates self-hosted healthchecks/job notification service, scheduler.
 
+# Quick start (Dev)
+
+Build and start container (if not running already):
+
+```sh
+    docker-compose -f ./dev-docker/docker-compose.yml build && \
+    docker-compose -f ./dev-docker/docker-compose.yml up -d && \
+    docker exec -it ts-etl-dev bash
+    cd /app && black . && flake8 .
+```
+
+Open new terminal for source control.
+
+# Quick start (Prod)
+
 ## Roadmap
 - Dev container (to run tests, linting etc.)
     - Pre-commit?
