@@ -1,26 +1,27 @@
+from typing import Callable
 from queue import Queue, Empty
 import threading
 
-from tinyflux import TinyFlux, Point
+# TODO: rework to run job in parallel, currently running sequentially
 
-
-class Engine:
-    def __init__(self, tinyflux_path):
-        self._tinyflux_path = tinyflux_path
+class ScheduleWorker:
+    def __init__(self, config):
+        self._config = config
         self._worker_thread = None
         self._exit_worker = False
         self._queue = Queue()
 
     def _worker(self):
-        with TinyFlux(self._tinyflux_path) as db:
-            while not self._exit_worker:
-                if not self._queue.empty():
-                    try:
-                        item = self._queue.get(timeout=1)
-                    except Empty:
-                        pass
-                    else:
-                        db.insert(item)
+        while not self._exit_worker:
+            if not self._queue.empty():
+                try:
+                    item = self._queue.get(timeout=1)
+                except Empty:
+                    pass
+                else:
+                    # health check/job log
+                    item['func'](*item.get('args'), **item.get('kwargs'))
+                    # health check/job log stop
 
     def _is_worker_alive(self):
         if self._worker_thread:
@@ -44,5 +45,5 @@ class Engine:
     def queue_size(self):
         return self._queue.qsize()
 
-    def insert(self, item: Point):
+    def insert(self, item: dict[str, Callable | list | dict]):
         self._queue.put(item)

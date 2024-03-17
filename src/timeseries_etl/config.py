@@ -1,11 +1,23 @@
-import datetime
+import os
 
-import requests
-from tinyflux import Point
+class SchedulerConfig:
+    TINYFLUX_PATH = (
+        os.environ.get("TINYFLUX_PATH") or "./data/sched.csv"
+    )
+    SCHEDULER_TIMEZONE = "Australia/Melbourne"
+    LOOP_CYCLE_TIME = 1 #seconds
 
+class EngineConfig:
+    TINYFLUX_PATH = (
+        os.environ.get("TINYFLUX_PATH") or "./data/data.csv"
+    )  # influx would look like this: http://localhost:4242/api/v2/write?bucket=tsdb
 
-class ExtractorBOM:
-    PARAMS = {
+class MQTTConfig:
+    MQTT_ADDRESS = os.environ.get("MQTT_ADDRESS") or "127.0.0.1"
+    MQTT_PORT = os.environ.get("MQTT_PORT") or 1883
+
+class BOMConfig:
+    _PARAMS = {
         "cookies": {
             "_ga": "GA1.1.121450838.1706667718",
             "__utmz": "172860464.1709514035.12.6.utmcsr=google|utmccn=(organic)|utmcmd=organic|utmctr=(not%20provided)",
@@ -30,7 +42,7 @@ class ExtractorBOM:
         },
     }
 
-    SITES = [
+    _SITES = [
         {
             "name": "Trentham (CFA)",
             "url": "http://www.bom.gov.au/fwo/IDV60801/IDV60801.99821.json",
@@ -49,43 +61,5 @@ class ExtractorBOM:
         },
     ]
 
-    @classmethod
-    def get_site_observations(cls, url) -> list[dict]:
-        return (
-            requests.get(
-                url, headers=cls.PARAMS["headers"], params=cls.PARAMS["cookies"]
-            )
-            .json()
-            .get("observations")
-            .get("data")
-        )
-
-    @staticmethod
-    def ob_to_point(ob) -> Point:
-        # Datetime object that is "timezone-aware".
-        ts = datetime.datetime.strptime(ob["local_date_time_full"], "%Y%m%d%H%M%S")
-
-        # Tags as a dict of string/string key values.
-        tags = {"source": "BOM", "loc_name": ob["name"]}
-
-        # Fields as a dict of string/numeric key values.
-        fields = {
-            "air_temp": float(ob["air_temp"]),
-            "rel_hum": float(ob["rel_hum"]),
-        }
-
-        # Initialize the Point with the above attributes.
-        return Point(
-            measurement="climate",
-            time=ts,
-            tags=tags,
-            fields=fields,
-        )
-
-    @classmethod
-    def get_points(cls) -> list[Point]:
-        observations = [
-            obs for site in cls.SITES for obs in cls.get_site_observations(site["url"])
-        ]
-
-        return [cls.ob_to_point(ob) for ob in observations]
+class P110Config:
+    pass
