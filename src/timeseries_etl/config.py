@@ -1,20 +1,22 @@
 import os
 
+
 class SchedulerConfig:
-    TINYFLUX_PATH = (
-        os.environ.get("TINYFLUX_PATH") or "./data/sched.csv"
-    )
+    TINYFLUX_PATH = os.environ.get("TINYFLUX_PATH") or "./data/sched.csv"
     SCHEDULER_TIMEZONE = "Australia/Melbourne"
-    LOOP_CYCLE_TIME = 1 #seconds
+    LOOP_CYCLE_TIME = 1  # seconds
+
 
 class EngineConfig:
     TINYFLUX_PATH = (
         os.environ.get("TINYFLUX_PATH") or "./data/data.csv"
     )  # influx would look like this: http://localhost:4242/api/v2/write?bucket=tsdb
 
+
 class MQTTConfig:
     MQTT_ADDRESS = os.environ.get("MQTT_ADDRESS") or "127.0.0.1"
     MQTT_PORT = os.environ.get("MQTT_PORT") or 1883
+
 
 class BOMConfig:
     _PARAMS = {
@@ -60,6 +62,7 @@ class BOMConfig:
             "url": "http://www.bom.gov.au/fwo/IDV60801/IDV60801.94860.json",
         },
     ]
+
 
 class P110Config:
     pass

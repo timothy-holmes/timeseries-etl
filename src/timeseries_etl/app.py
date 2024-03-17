@@ -1,19 +1,22 @@
 import time
+
 import schedule
 
 from tsdb.engine import Engine, EngineMaintenance
 from workers.sched import ScheduleWorker
 from workers.bom_etl import ExtractorBOM
+
 # from workers.p110_etl import ExtractorP110
 from config import (
-    BOMConfig, 
-    # P110Config, 
-    SchedulerConfig, 
-    EngineConfig
+    BOMConfig,
+    # P110Config,
+    SchedulerConfig,
+    EngineConfig,
 )
 
+
 def main():
-# singleton/services
+    # singleton/services
     sched = ScheduleWorker(config=SchedulerConfig)
     engine = Engine(config=EngineConfig)
     engine_maintenance = EngineMaintenance(engine=engine)
@@ -32,22 +35,23 @@ def main():
             engine_service.insert(p)
 
     schedule.every(1).days.at("12:00", tz="Australia/Melbourne").do(
-        sched.run, 
+        sched.run,
         item={
-        'func': bom_job,
-        'kwargs': {'bom_service': bom, 'engine_service': engine}
-        }
+            "func": bom_job,
+            "kwargs": {"bom_service": bom, "engine_service": engine},
+        },
     )
     schedule.every(1).days.at("12:00", tz="Australia/Melbourne").do(
         sched.run,
-        sched_service=sched, 
+        sched_service=sched,
         item={
-        'func': bom_job,
-        'kwargs': {'bom_service': bom, 'engine_service': engine}
-        }
+            "func": bom_job,
+            "kwargs": {"bom_service": bom, "engine_service": engine},
+        },
     )
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     # setup
     main()
 

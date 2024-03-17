@@ -1,5 +1,8 @@
 def pytest_sessionfinish(session, exitstatus):
-    """After tests are run clean up ./tests/data/ folder by deleting all *-temp.db files"""
+    """
+    After tests are run clean up ./tests/data/ folder 
+    by deleting all *-temp.db files
+    """
     import os
 
     for file in os.listdir("./tests/data/"):

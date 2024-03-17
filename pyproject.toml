@@ -14,12 +14,25 @@ version = "0.0.1"
 
 [project.optional-dependencies]
 dev = [
-    "pytest"
+    "pytest",
+    "black",
+    "flake8",
+    "flake8-black",
+    "flake8-pyproject",
+    "pytest-cov",
+    "coverage"
 ]
-
 
 [tool.pytest.ini_options]
 addopts = [
     "--import-mode=importlib"
 ]
 pythonpath = "src"
+
+[tool.flake8]
+max-line-length = 88
+count = true
+exclude = "./build"
+
+[tool.black]
+exclude = "./build"

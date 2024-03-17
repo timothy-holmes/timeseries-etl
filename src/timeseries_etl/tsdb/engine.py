@@ -67,6 +67,7 @@ class EngineMaintenance:
 
     def _backup(self):
         os.copy(
-            self._engine._tinyflux_path, 
-            self._engine._tinyflux_path + f'.bak-{datetime.now().strftime("%Y%m%d%H%M%S")}'
+            self._engine._tinyflux_path,
+            self._engine._tinyflux_path
+            + f'.bak-{datetime.now().strftime("%Y%m%d%H%M%S")}',
         )

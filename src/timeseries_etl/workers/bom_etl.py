@@ -9,7 +9,6 @@ class ExtractorBOM:
         self._SITES = config.SITES
         self._PARAMS = config.PARAMS
 
-
     def _get_site_observations(self, url) -> list[dict]:
         return (
             requests.get(
@@ -42,10 +41,11 @@ class ExtractorBOM:
             fields=fields,
         )
 
-
     def get_points(self) -> list[Point]:
         observations = [
-            obs for site in self._SITES for obs in self._get_site_observations(site["url"])
+            obs
+            for site in self._SITES
+            for obs in self._get_site_observations(site["url"])
         ]
 
         return [self._ob_to_point(ob) for ob in observations]

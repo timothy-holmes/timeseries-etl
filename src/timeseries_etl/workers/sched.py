@@ -4,6 +4,7 @@ import threading
 
 # TODO: rework to run job in parallel, currently running sequentially
 
+
 class ScheduleWorker:
     def __init__(self, config):
         self._config = config
@@ -20,7 +21,7 @@ class ScheduleWorker:
                     pass
                 else:
                     # health check/job log
-                    item['func'](*item.get('args'), **item.get('kwargs'))
+                    item["func"](*item.get("args"), **item.get("kwargs"))
                     # health check/job log stop
 
     def _is_worker_alive(self):
