@@ -7,7 +7,7 @@ import threading
 
 class ScheduleWorker:
     def __init__(self, config):
-        self._config = config
+        # self._config = config
         self._worker_thread = None
         self._exit_worker = False
         self._queue = Queue()

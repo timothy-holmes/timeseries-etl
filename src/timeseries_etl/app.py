@@ -14,17 +14,33 @@ from timeseries_etl.config import (
 
 
 def main():
-    # singleton/services
-    sched = ScheduleWorker(config=SchedulerConfig)
-    engine = Engine(config=EngineConfig)
-    engine_maintenance = EngineMaintenance(engine=engine)
-    bom = ExtractorBOM(config=BOMConfig)
-
     # workers
-    sched.start_worker()
-    engine.start_worker()
+    with (
+        ScheduleWorker(config=SchedulerConfig) as sched, 
+        Engine(config=EngineConfig) as engine
+    ):
 
-    # schuedled jobs
+        # non-threaded service
+        engine_maintenance = EngineMaintenance(engine=engine)
+
+        # client
+        bom = ExtractorBOM(config=BOMConfig)
+
+        try:
+            set_schedule(sched, engine, engine_maintenance, bom)
+            schedule.run_all(delay_seconds=10)
+
+            # run
+            while True:
+                schedule.run_pending()
+                time.sleep(1)
+
+        except KeyboardInterrupt:
+            pass
+
+
+def set_schedule(sched, engine, engine_maintenance, bom):
+    # job functions
     def engine_maintenance_job(engine_maintenance_service):
         engine_maintenance_service.run()
 
@@ -32,6 +48,7 @@ def main():
         for p in bom_service.get_points():
             engine_service.insert(p)
 
+    # schedule entries
     schedule.every(1).days.at("12:00").do(
         sched.run,
         item={
@@ -46,11 +63,3 @@ def main():
             "kwargs": {"engine_maintenance_service": engine_maintenance},
         },
     )
-
-    # hot start
-    schedule.run_all(delay_seconds=10)
-
-    # run
-    while True:
-        schedule.run_pending()
-        time.sleep(1)
