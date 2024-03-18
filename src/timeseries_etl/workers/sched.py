@@ -21,7 +21,7 @@ class ScheduleWorker:
                     pass
                 else:
                     # health check/job log
-                    item["func"](*item.get("args"), **item.get("kwargs"))
+                    item["func"](*item.get("args",[]), **item.get("kwargs",{}))
                     # health check/job log stop
 
     def _is_worker_alive(self):
@@ -46,5 +46,5 @@ class ScheduleWorker:
     def queue_size(self):
         return self._queue.qsize()
 
-    def insert(self, item: dict[str, Callable | list | dict]):
+    def run(self, item: dict[str, Callable | list | dict]):
         self._queue.put(item)

@@ -19,7 +19,7 @@ class MQTTConfig:
 
 
 class BOMConfig:
-    _PARAMS = {
+    PARAMS = {
         "cookies": {
             "_ga": "GA1.1.121450838.1706667718",
             "__utmz": "172860464.1709514035.12.6.utmcsr=google|utmccn=(organic)|utmcmd=organic|utmctr=(not%20provided)",
@@ -44,7 +44,7 @@ class BOMConfig:
         },
     }
 
-    _SITES = [
+    SITES = [
         {
             "name": "Trentham (CFA)",
             "url": "http://www.bom.gov.au/fwo/IDV60801/IDV60801.99821.json",

@@ -8,8 +8,8 @@ from tinyflux import TinyFlux, Point
 
 
 class Engine:
-    def __init__(self, tinyflux_path):
-        self._tinyflux_path = tinyflux_path
+    def __init__(self, config):
+        self._tinyflux_path = config.TINYFLUX_PATH
         self._worker_thread = None
         self._exit_worker = False
         self._queue = Queue()
