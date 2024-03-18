@@ -21,7 +21,10 @@ dev = [
     "flake8-black",
     "flake8-pyproject",
     "pytest-cov",
-    "coverage"
+    "coverage",
+    "genson",
+    "responses==0.25.0",
+    "pylint"
 ]
 
 [tool.pytest.ini_options]
