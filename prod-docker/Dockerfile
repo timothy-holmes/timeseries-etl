@@ -12,9 +12,17 @@ FROM python:3.11 as base
 COPY --from=pip_compile /app/requirements.txt /app/requirements.txt
 RUN pip install -r requirements.txt
 
-# install extra dev deps
+# install extra dev deps, copy src and tests, run pytest
 FROM base as tests
 COPY --from=pip_compile /app/dev-requirements.txt /app/dev-requirements.txt
 RUN pip install -r dev-requirements.txt
 
-# (almost) same as prod Dockerfile to here
+COPY ./config .
+COPY ./src .
+COPY ./tests .
+
+RUN pytest
+
+# copy src
+FROM base as prod
+COPY ./src /app/src
