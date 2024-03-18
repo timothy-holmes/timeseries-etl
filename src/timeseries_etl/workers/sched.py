@@ -46,5 +46,5 @@ class ScheduleWorker:
     def queue_size(self):
         return self._queue.qsize()
 
-    def run(self, item: dict[str, Callable | list | dict]):
+    def add_job(self, item: dict[str, Callable | list | dict]):
         self._queue.put(item)

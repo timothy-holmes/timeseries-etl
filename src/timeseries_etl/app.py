@@ -41,25 +41,21 @@ def main():
 
 def set_schedule(sched, engine, engine_maintenance, bom):
     # job functions
-    def engine_maintenance_job(engine_maintenance_service):
-        engine_maintenance_service.run()
-
     def bom_job(bom_service, engine_service):
         for p in bom_service.get_points():
             engine_service.insert(p)
 
     # schedule entries
     schedule.every(1).days.at("12:00").do(
-        sched.run,
+        sched.add_job,
         item={
             "func": bom_job,
             "kwargs": {"bom_service": bom, "engine_service": engine},
         },
     )
     schedule.every(1).days.at("13:00").do(
-        sched.run,
+        sched.add_job,
         item={
-            "func": engine_maintenance_job,
-            "kwargs": {"engine_maintenance_service": engine_maintenance},
+            "func": engine_maintenance.run
         },
     )
