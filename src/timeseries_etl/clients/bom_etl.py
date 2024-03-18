@@ -6,13 +6,13 @@ from tinyflux import Point
 
 class ExtractorBOM:
     def __init__(self, config):
-        self._SITES = config.SITES
-        self._PARAMS = config.PARAMS
+        self.sites = config.SITES
+        self.params = config.PARAMS
 
     def _get_site_observations(self, url) -> list[dict]:
         return (
             requests.get(
-                url, headers=self._PARAMS["headers"], params=self._PARAMS["cookies"]
+                url, headers=self.params["headers"], params=self.params["cookies"]
             )
             .json()
             .get("observations")
@@ -44,7 +44,7 @@ class ExtractorBOM:
     def get_points(self) -> list[Point]:
         observations = [
             obs
-            for site in self._SITES
+            for site in self.sites
             for obs in self._get_site_observations(site["url"])
         ]
 
