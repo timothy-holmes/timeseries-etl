@@ -48,3 +48,11 @@ class ScheduleWorker:
 
     def add_job(self, item: dict[str, Callable | list | dict]):
         self._queue.put(item)
+
+    # methods for context manager
+    def __enter__(self):
+        self.start_worker()
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.stop_worker()

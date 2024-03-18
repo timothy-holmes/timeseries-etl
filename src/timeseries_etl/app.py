@@ -7,7 +7,6 @@ from timeseries_etl.workers.sched import ScheduleWorker
 from timeseries_etl.clients.bom_etl import ExtractorBOM
 from timeseries_etl.config import (
     BOMConfig,
-    # P110Config,
     SchedulerConfig,
     EngineConfig,
 )
@@ -16,8 +15,8 @@ from timeseries_etl.config import (
 def main():
     # workers
     with (
-        ScheduleWorker(config=SchedulerConfig) as sched, 
-        Engine(config=EngineConfig) as engine
+        ScheduleWorker(config=SchedulerConfig) as sched,
+        Engine(config=EngineConfig) as engine,
     ):
 
         # non-threaded service
@@ -55,7 +54,5 @@ def set_schedule(sched, engine, engine_maintenance, bom):
     )
     schedule.every(1).days.at("13:00").do(
         sched.add_job,
-        item={
-            "func": engine_maintenance.run
-        },
+        item={"func": engine_maintenance.run},
     )
