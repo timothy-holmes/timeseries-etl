@@ -14,11 +14,12 @@ class ExtractorBOM:
 
     def _get_site_obs(self, url, to_list) -> None:
         try:
-            response = requests.get(url)
-        except requests.exceptions.Timeout:
+            response = self._adapter.get(url)
+            json_output = response.json()
+        except requests.exceptions.JSONDecodeError:
             return
 
-        data = response.json().get("observations", {}).get("data", [])
+        data = json_output.get("observations", {}).get("data", [])
 
         for ob in data:
             to_list.append(ob)
