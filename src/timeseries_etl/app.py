@@ -2,9 +2,9 @@ import time
 
 import schedule
 
-from timeseries_etl.tsdb.engine import Engine, EngineMaintenance
+from timeseries_etl.workers.tsdb_engine import Engine, EngineMaintenance
 from timeseries_etl.workers.sched import ScheduleWorker
-from timeseries_etl.workers.bom_etl import ExtractorBOM
+from timeseries_etl.clients.bom_etl import ExtractorBOM
 from timeseries_etl.config import (
     BOMConfig,
     # P110Config,
@@ -54,5 +54,3 @@ def main():
     while True:
         schedule.run_pending()
         time.sleep(1)
-
-

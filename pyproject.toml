@@ -36,4 +36,4 @@ count = true
 exclude = "./build"
 
 [tool.black]
-exclude = "./build"
+# no need for exclude (uses gitignore)
