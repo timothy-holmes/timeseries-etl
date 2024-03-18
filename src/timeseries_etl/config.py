@@ -18,7 +18,7 @@ class MQTTConfig:
 
 
 class BOMConfig:
-    PARAMS = json.load(open("./config/bom_params.json", "r"))
+    PARAMS = json.load(open("../config/bom_params.json", "r"))
     SITES = [
         {
             "name": "Trentham (CFA)",

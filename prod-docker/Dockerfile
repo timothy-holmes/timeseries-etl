@@ -20,12 +20,16 @@ FROM base as tests
 COPY --from=pip_compile /app/dev-requirements.txt dev-requirements.txt
 RUN pip install -r dev-requirements.txt
 
-COPY ./config .
-COPY ./src .
-COPY ./tests .
+WORKDIR /app
+COPY ./config config
+COPY ./src src
+COPY ./tests tests
 
 RUN pytest
 
 # copy src
 FROM base as prod
-COPY ./src /app/src
+
+WORKDIR /app
+COPY ./src src
+COPY ./config config
