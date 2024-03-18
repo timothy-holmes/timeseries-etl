@@ -3,8 +3,6 @@ import json
 
 
 class SchedulerConfig:
-    TINYFLUX_PATH = os.environ.get("TINYFLUX_PATH") or "./data/sched.csv"
-    SCHEDULER_TIMEZONE = "Australia/Melbourne"
     LOOP_CYCLE_TIME = 1  # seconds
 
 
@@ -20,14 +18,7 @@ class MQTTConfig:
 
 
 class BOMConfig:
-    try:
-        PARAMS = json.load(open(".config/bom_params.json", "r"))
-    except FileNotFoundError:
-        PARAMS = {
-            "headers": {"Accept": "application/json"},
-            "cookies": {"key": "value"},
-        }
-
+    PARAMS = json.load(open("./config/bom_params.json", "r"))
     SITES = [
         {
             "name": "Trentham (CFA)",
@@ -46,6 +37,7 @@ class BOMConfig:
             "url": "http://www.bom.gov.au/fwo/IDV60801/IDV60801.94860.json",
         },
     ]
+    DEFAULT_TIMEOUT = 5
 
 
 class P110Config:

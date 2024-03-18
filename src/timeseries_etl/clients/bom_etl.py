@@ -1,26 +1,39 @@
 import datetime
+import threading
 
 import requests
 from tinyflux import Point
 
+from timeseries_etl.clients.request import get_adapter
+
 
 class ExtractorBOM:
     def __init__(self, config):
-        self.sites = config.SITES
-        self.params = config.PARAMS
+        self._sites = config.SITES
+        self._adapter = get_adapter(config)
 
-    def _get_site_observations(self, url) -> list[dict]:
-        return (
-            requests.get(
-                url, headers=self.params["headers"], params=self.params["cookies"]
-            )
-            .json()
-            .get("observations")
-            .get("data")
-        )
+    def _get_site_obs(self, url, to_list) -> None:
+        try:
+            response = requests.get(url)
+        except requests.exceptions.Timeout:
+            return
+
+        data = response.json().get("observations", {}).get("data", [])
+
+        for ob in data:
+            to_list.append(ob)
 
     @staticmethod
     def _ob_to_point(ob) -> Point:
+        """
+        Convert a weather observation into a data point.
+
+        Args:
+            ob (dict): The weather observation to convert into a data point.
+
+        Returns:
+            Point: A data point representing the weather observation.
+        """
         # Datetime object that is "timezone-naive".
         ts = datetime.datetime.strptime(ob["local_date_time_full"], "%Y%m%d%H%M%S")
 
@@ -42,10 +55,24 @@ class ExtractorBOM:
         )
 
     def get_points(self) -> list[Point]:
-        observations = [
-            obs
-            for site in self.sites
-            for obs in self._get_site_observations(site["url"])
-        ]
+        """
+        Retrieve all the data points extracted from BOM sites.
 
-        return [self._ob_to_point(ob) for ob in observations]
+        Returns:
+            list[Point]: A list of data points extracted from BOM sites.
+        """
+        result = []  # single operation (ie. append) is thread-safe
+        threads = []
+
+        for site in self._sites:
+            thread = threading.Thread(
+                target=self._get_site_obs,
+                kwargs={"url": site["url"], "to_list": result},
+            )
+            thread.start()
+            threads.append(thread)
+
+        for thread in threads:
+            thread.join()
+
+        return [self._ob_to_point(d) for d in result]
