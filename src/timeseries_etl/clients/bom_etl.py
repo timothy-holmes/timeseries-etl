@@ -1,5 +1,6 @@
 import datetime
 import threading
+import logging
 
 import requests
 from tinyflux import Point
@@ -8,9 +9,10 @@ from timeseries_etl.clients.request import get_adapter
 
 
 class ExtractorBOM:
-    def __init__(self, config):
+    def __init__(self, config, log: logging.Logger) -> None:
         self._sites = config.SITES
         self._adapter = get_adapter(config)
+        self._log = log
 
     def _get_site_obs(self, url, to_list) -> None:
         try:
@@ -20,6 +22,7 @@ class ExtractorBOM:
             return
 
         data = json_output.get("observations", {}).get("data", [])
+        self._log.info(f"Got {len(data)} observations from {url}")
 
         for ob in data:
             to_list.append(ob)
@@ -65,6 +68,8 @@ class ExtractorBOM:
         result = []  # single operation (ie. append) is thread-safe
         threads = []
 
+        self._log.info(f"Retrieving data from {len(self._sites)} sites...")
+
         for site in self._sites:
             thread = threading.Thread(
                 target=self._get_site_obs,
@@ -75,5 +80,9 @@ class ExtractorBOM:
 
         for thread in threads:
             thread.join()
+
+        self._log.info(
+            f"Retrieved {len(result)} observations from {len(self._sites)} sites"
+        )
 
         return [self._ob_to_point(d) for d in result]

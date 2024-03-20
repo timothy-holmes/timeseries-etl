@@ -3,6 +3,7 @@ import time
 import random
 import string
 
+import pytest
 from tinyflux import Point
 
 from timeseries_etl.workers.tsdb_engine import Engine
@@ -16,6 +17,10 @@ def temp_tinyflux_path():
 
     return Config
 
+@pytest.fixture
+def mock_engine(mock_log):
+    return Engine(temp_tinyflux_path(), log=mock_log)
+
 
 def test_temp_db_path():
     path = temp_tinyflux_path().TINYFLUX_PATH
@@ -25,18 +30,16 @@ def test_temp_db_path():
     assert path != temp_tinyflux_path()
 
 
-def test_worker_starts_and_stops():
-    engine = Engine(temp_tinyflux_path())
+def test_worker_starts_and_stops(mock_engine):
+    engine = mock_engine
     engine.start_worker()
-    time.sleep(1)
     assert engine._is_worker_alive() is True
     engine.stop_worker()
-    time.sleep(1)
     assert engine._is_worker_alive() is False
 
 
-def test_insert_and_queue_size():
-    engine = Engine(temp_tinyflux_path())
+def test_insert_and_queue_size(mock_engine):
+    engine = mock_engine
     point1 = Point(
         time=datetime.now() - timedelta(seconds=1),
         measurement="measurement1",
@@ -55,20 +58,22 @@ def test_insert_and_queue_size():
     assert engine.queue_size() == 2
 
     engine.start_worker()
-    time.sleep(1)
+    time.sleep(0.5)
     assert engine.queue_size() == 0
 
     engine.stop_worker()
 
-
-def test_performance():
+@pytest.mark.skipif(
+    "not config.getoption('longtest')", reason="need --longtest option to run"
+)
+def test_performance(mock_log):
     # wait until end of other tests
     time.sleep(10)
     num_points = 1000
 
     # setup timing
     prework_start = time.time()
-    with Engine(temp_tinyflux_path()) as engine:
+    with Engine(temp_tinyflux_path(), log=mock_log) as engine:
         prework_result = time.time() - prework_start
 
         # create random points
@@ -96,10 +101,8 @@ def test_performance():
     ), f"TinyFlux engine not fast enough inserting {num_points} points"
 
 
-def test_context_implementation():
-    with Engine(temp_tinyflux_path()) as engine:
-        time.sleep(1)
+def test_context_implementation(mock_log):
+    with Engine(temp_tinyflux_path(), log=mock_log) as engine:
         assert engine._is_worker_alive() is True
 
-    time.sleep(1)
     assert engine._is_worker_alive() is False

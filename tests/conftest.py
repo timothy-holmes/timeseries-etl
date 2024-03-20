@@ -1,3 +1,5 @@
+import pytest
+
 def pytest_sessionfinish(session, exitstatus):
     """
     After tests are run clean up ./tests/data/ folder
@@ -18,3 +20,23 @@ def pytest_addoption(parser):
         default=False,
         help="(custom) enable outside requests",
     )
+    parser.addoption(
+        "--longtest",
+        action="store_true",
+        dest="longtest",
+        default=False,
+        help="(custom) enable long tests",
+    )
+
+@pytest.fixture(scope="session")
+def mock_log():
+    def return_none(*args, **kwargs):
+        """Ignores all arguments and returns None."""
+        return None
+
+    class MyClass(object):
+        def __getattr__(self, attrname):
+            """Handles lookups of attributes that aren't found through the normal lookup."""
+            return return_none
+        
+    return MyClass()

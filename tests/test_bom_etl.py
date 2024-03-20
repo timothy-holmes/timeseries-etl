@@ -23,14 +23,14 @@ def single_observation():
 
 
 @pytest.fixture
-def extractor(sites):
+def extractor(sites, mock_log):
     class Config:
         PARAMS = {"headers": {"Accept": "application/json"}, "cookies": {}}
         SITES = sites
         DEFAULT_TIMEOUT = 5
         # Add other configuration settings as needed
 
-    return ExtractorBOM(Config)
+    return ExtractorBOM(Config, log=mock_log)
 
 
 @pytest.fixture

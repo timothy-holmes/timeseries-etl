@@ -5,12 +5,14 @@ import os.path
 from datetime import datetime
 from typing import Sequence
 import shutil
+import logging
 
 from tinyflux import TinyFlux, Point
 
 
 class Engine:
-    def __init__(self, config):
+    def __init__(self, config, log: logging.Logger):
+        self._log = log
         self._tinyflux_path = config.TINYFLUX_PATH
         self._worker_thread = None
         self._exit_worker = False
@@ -29,25 +31,41 @@ class Engine:
 
     def _is_worker_alive(self) -> bool:
         if self._worker_thread:
-            return self._worker_thread.is_alive()
+            if self._worker_thread.is_alive():
+                self._log.debug(f"worker ({self.__class__.__name__}) is alive")
+                return True
+            else:
+                self._log.debug("worker ({self.__class__.__name__}) is dead")
+                return False
         else:
+            self._log.debug("worker ({self.__class__.__name__}) is gone")
             return False
 
-    def start_worker(self) -> None:
-        """Blocking method to start worker. Worker is started on return."""
+    def start_worker(self):
         self._exit_worker = False
         if not self._is_worker_alive():
             self._worker_thread = threading.Thread(target=self._worker)
             self._worker_thread.start()
+            self._log.debug("worker ({self.__class__.__name__}) started")
+        else:
+            self._log.debug("worker ({self.__class__.__name__}) already started")
 
-    def stop_worker(self) -> None:
-        """Blocking method to stop worker. Worker is stopped on return."""
+        return True
+
+    def stop_worker(self):
         self._exit_worker = True
         if self._is_worker_alive():
+            self._log.debug("worker ({self.__class__.__name__}) stopping")
             self._worker_thread.join()
+            self._log.debug("worker ({self.__class__.__name__}) stopped")
+        else:
+            self._log.debug("worker ({self.__class__.__name__}) already stopped")
+        return True
 
-    def queue_size(self) -> int:
-        return self._queue.qsize()
+    def queue_size(self):
+        queue_size = self._queue.qsize()
+        self._log.debug("({self.__class__.__name__}) queue size: {queue_size}")
+        return queue_size
 
     def insert(self, item: Point) -> None:
         self._queue.put(item)
