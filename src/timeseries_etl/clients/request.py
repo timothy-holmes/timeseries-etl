@@ -23,7 +23,6 @@ def get_adapter(config):
     session = requests.Session()
     assert_status_hook = lambda response, *args, **kwargs: response.raise_for_status()
     session.hooks["response"] = [assert_status_hook]
-    session.cookies = config.PARAMS["cookies"]
     session.headers = config.PARAMS["headers"]
     retries = Retry(
         total=3, backoff_factor=1, status_forcelist=[429, 500, 502, 503, 504]
