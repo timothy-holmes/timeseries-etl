@@ -19,7 +19,7 @@ def sites():
 
 @pytest.fixture
 def single_observation():
-    return json.load(open("tests/data/bom/single_observation.json"))
+    return json.load(open("tests/test_data/bom/single_observation.json"))
 
 
 @pytest.fixture
@@ -78,10 +78,10 @@ def test_get_points(extractor, register_responses):
 def test_bom_schema():
     """Validate the json data example matches the generated schema"""
     bom_schema = genson.SchemaBuilder()
-    bom_schema.add_schema(json.load(open("tests/data/bom/schema/bom.schema.json")))
+    bom_schema.add_schema(json.load(open("tests/test_data/bom/schema/bom.schema.json")))
     example_schema = genson.SchemaBuilder()
-    example_schema.add_schema(json.load(open("tests/data/bom/schema/bom.schema.json")))
-    example_schema.add_object(json.load(open("tests/data/bom/excerpt.json")))
+    example_schema.add_schema(json.load(open("tests/test_data/bom/schema/bom.schema.json")))
+    example_schema.add_object(json.load(open("tests/test_data/bom/excerpt.json")))
     assert bom_schema == example_schema
 
 

@@ -25,8 +25,8 @@ def mock_engine(mock_log):
 def test_temp_db_path():
     path = temp_tinyflux_path().TINYFLUX_PATH
     assert path.endswith("-temp.db")
-    assert path.startswith("./tests/data/")
-    assert len(path) == 8 + len("./tests/data/") + len("-temp.db")
+    assert path.startswith("./tests/test_data/")
+    assert len(path) == 8 + len("./tests/test_data/") + len("-temp.db")
     assert path != temp_tinyflux_path()
 
 
