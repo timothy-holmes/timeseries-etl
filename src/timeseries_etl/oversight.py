@@ -54,7 +54,7 @@ config = {
             "class": "logging.handlers.RotatingFileHandler",
             "formatter": "precise",
             "level": "DEBUG",
-            "filename": "my-first-log.log",
+            "filename": "./logs/my-first-log.log",
             "maxBytes": 1024,
             "backupCount": 3,
         },
