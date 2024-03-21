@@ -80,7 +80,9 @@ def test_bom_schema():
     bom_schema = genson.SchemaBuilder()
     bom_schema.add_schema(json.load(open("tests/test_data/bom/schema/bom.schema.json")))
     example_schema = genson.SchemaBuilder()
-    example_schema.add_schema(json.load(open("tests/test_data/bom/schema/bom.schema.json")))
+    example_schema.add_schema(
+        json.load(open("tests/test_data/bom/schema/bom.schema.json"))
+    )
     example_schema.add_object(json.load(open("tests/test_data/bom/excerpt.json")))
     assert bom_schema == example_schema
 

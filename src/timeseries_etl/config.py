@@ -41,4 +41,6 @@ class BOMConfig:
 
 
 class P110Config:
-    pass
+    TAPO_ADDRESS = "192.168.1.111"
+    TAPO_USERNAME = "tim.a.holmes@gmail.com"
+    TAPO_PASSWORD = os.environ.get("TAPO_PASSWORD")

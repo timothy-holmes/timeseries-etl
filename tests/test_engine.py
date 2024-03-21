@@ -17,6 +17,7 @@ def temp_tinyflux_path():
 
     return Config
 
+
 @pytest.fixture
 def mock_engine(mock_log):
     return Engine(temp_tinyflux_path(), log=mock_log)
@@ -62,6 +63,7 @@ def test_insert_and_queue_size(mock_engine):
     assert engine.queue_size() == 0
 
     engine.stop_worker()
+
 
 @pytest.mark.skipif(
     "not config.getoption('longtest')", reason="need --longtest option to run"

@@ -1,5 +1,6 @@
 import pytest
 
+
 def pytest_sessionfinish(session, exitstatus):
     """
     After tests are run clean up ./tests/data/ folder
@@ -28,6 +29,7 @@ def pytest_addoption(parser):
         help="(custom) enable long tests",
     )
 
+
 @pytest.fixture(scope="session")
 def mock_log():
     def return_none(*args, **kwargs):
@@ -38,5 +40,5 @@ def mock_log():
         def __getattr__(self, attrname):
             """Handles lookups of attributes that aren't found through the normal lookup."""
             return return_none
-        
+
     return MyClass()

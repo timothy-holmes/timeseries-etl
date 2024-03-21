@@ -12,6 +12,11 @@ def test_vars_available():
         "TINYFLUX_PATH": EngineConfig,
         "MQTT_ADDRESS": MQTTConfig,
         "MQTT_PORT": MQTTConfig,
+        "PARAMS": BOMConfig,
+        "SITES": BOMConfig,
+        "DEFAULT_TIMEOUT": BOMConfig,
+        "TAPO_USERNAME": P110Config,
+        "TAPO_PASSWORD": P110Config,  # needs to be set at run time
     }
     for var in required_vars:
         class_name = required_vars[var].__class__.__name__
