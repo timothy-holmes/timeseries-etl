@@ -4,8 +4,8 @@ services:
     timeseries-etl:
         container_name: ts-etl-prod
         build:
-            context: ../
-            dockerfile: ./prod-docker/Dockerfile
+            context: ../../
+            dockerfile: ./docker/prod/Dockerfile
         volumes:
             - ../data:/app/data
         command: bash -c "python /app/src/run.py"

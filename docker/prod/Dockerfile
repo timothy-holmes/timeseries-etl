@@ -25,7 +25,8 @@ COPY ./config config
 COPY ./src src
 COPY ./tests tests
 
-RUN pytest
+# run tests (additional parameters required for long-running tests)
+RUN pytest --longtest --outside
 
 # copy src
 FROM base as prod

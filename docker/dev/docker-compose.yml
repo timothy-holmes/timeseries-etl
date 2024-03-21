@@ -4,10 +4,10 @@ services:
     timeseries-etl:
         container_name: ts-etl-dev
         build:
-            context: ../
-            dockerfile: ./dev-docker/Dockerfile
+            context: ../../
+            dockerfile: ./docker/dev/Dockerfile
         volumes:
-            - ../:/app
+            - ../../:/app
         command: bash -c "pip install .[dev] && pip uninstall -y etl_timeseries && tail -f /dev/null"
         tty: true
 

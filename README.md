@@ -4,20 +4,30 @@
 
 Exhaustive data pipeline for projects. Integates self-hosted healthchecks/job notification service, scheduler.
 
-# Quick start (Dev)
+## Quick start
+### Development
 
 Build and start container (if not running already):
 
 ```sh
-    docker-compose -f ./dev-docker/docker-compose.yml build && \
-    docker-compose -f ./dev-docker/docker-compose.yml up -d && \
-    docker exec -it ts-etl-dev bash
-    cd /app && black . && flake8 .
+    docker-compose -f ./docker/dev/docker-compose.yml build && \
+    docker-compose -f ./docker/dev/docker-compose.yml up -d
 ```
 
-Open new terminal for source control.
+- enter container using VS Code to attach
+- open bash inside container: 
+    `docker exec -it ts-etl-dev bash`
+- run commands inside container when required:
+    `docker exec -t ts-etl-dev pytest`
 
-# Quick start (Prod)
+### Production
+
+Build and start container:
+
+```sh
+    docker-compose -f ./docker/prod/docker-compose.yml build && \
+    docker-compose -f ./docker/prod/docker-compose.yml up -d
+```
 
 ## Roadmap
 - Dev container (to run tests, linting etc.)
@@ -42,7 +52,7 @@ Open new terminal for source control.
 - Data reports (job)
 - CI/CD pipeline
 
-## First release
+## First release (v0.1.0)
 - DB worker written
 - BoM integration done
 - Pytest, tests written
