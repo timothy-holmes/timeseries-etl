@@ -1,0 +1,288 @@
+{
+    "$schema": "http://json-schema.org/schema#",
+    "type": "object",
+    "properties": {
+        "observations": {
+            "type": "object",
+            "properties": {
+                "notice": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "copyright": {
+                                "type": "string"
+                            },
+                            "copyright_url": {
+                                "type": "string"
+                            },
+                            "disclaimer_url": {
+                                "type": "string"
+                            },
+                            "feedback_url": {
+                                "type": "string"
+                            }
+                        },
+                        "required": [
+                            "copyright",
+                            "copyright_url",
+                            "disclaimer_url",
+                            "feedback_url"
+                        ]
+                    }
+                },
+                "header": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "refresh_message": {
+                                "type": "string"
+                            },
+                            "ID": {
+                                "type": "string"
+                            },
+                            "main_ID": {
+                                "type": "string"
+                            },
+                            "name": {
+                                "type": "string"
+                            },
+                            "state_time_zone": {
+                                "type": "string"
+                            },
+                            "time_zone": {
+                                "type": "string"
+                            },
+                            "product_name": {
+                                "type": "string"
+                            },
+                            "state": {
+                                "type": "string"
+                            }
+                        },
+                        "required": [
+                            "ID",
+                            "main_ID",
+                            "name",
+                            "product_name",
+                            "refresh_message",
+                            "state",
+                            "state_time_zone",
+                            "time_zone"
+                        ]
+                    }
+                },
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "sort_order": {
+                                "type": "integer"
+                            },
+                            "wmo": {
+                                "type": "integer"
+                            },
+                            "name": {
+                                "type": "string"
+                            },
+                            "history_product": {
+                                "type": "string"
+                            },
+                            "local_date_time": {
+                                "type": "string"
+                            },
+                            "local_date_time_full": {
+                                "type": "string"
+                            },
+                            "aifstime_utc": {
+                                "type": "string"
+                            },
+                            "lat": {
+                                "type": "number"
+                            },
+                            "lon": {
+                                "type": "number"
+                            },
+                            "apparent_t": {
+                                "type": [
+                                    "null",
+                                    "number"
+                                ]
+                            },
+                            "cloud": {
+                                "type": "string"
+                            },
+                            "cloud_base_m": {
+                                "type": [
+                                    "integer",
+                                    "null"
+                                ]
+                            },
+                            "cloud_oktas": {
+                                "type": [
+                                    "integer",
+                                    "null"
+                                ]
+                            },
+                            "cloud_type": {
+                                "type": "string"
+                            },
+                            "cloud_type_id": {
+                                "type": [
+                                    "integer",
+                                    "null"
+                                ]
+                            },
+                            "delta_t": {
+                                "type": [
+                                    "null",
+                                    "number"
+                                ]
+                            },
+                            "gust_kmh": {
+                                "type": [
+                                    "integer",
+                                    "null"
+                                ]
+                            },
+                            "gust_kt": {
+                                "type": [
+                                    "integer",
+                                    "null"
+                                ]
+                            },
+                            "air_temp": {
+                                "type": [
+                                    "null",
+                                    "number"
+                                ]
+                            },
+                            "dewpt": {
+                                "type": [
+                                    "null",
+                                    "number"
+                                ]
+                            },
+                            "press": {
+                                "type": [
+                                    "null",
+                                    "number"
+                                ]
+                            },
+                            "press_msl": {
+                                "type": [
+                                    "null",
+                                    "number"
+                                ]
+                            },
+                            "press_qnh": {
+                                "type": [
+                                    "null",
+                                    "number"
+                                ]
+                            },
+                            "press_tend": {
+                                "type": "string"
+                            },
+                            "rain_trace": {
+                                "type": "string"
+                            },
+                            "rel_hum": {
+                                "type": [
+                                    "integer",
+                                    "null"
+                                ]
+                            },
+                            "sea_state": {
+                                "type": "string"
+                            },
+                            "swell_dir_worded": {
+                                "type": "string"
+                            },
+                            "swell_height": {
+                                "type": [
+                                    "null",
+                                    "number"
+                                ]
+                            },
+                            "swell_period": {
+                                "type": [
+                                    "integer",
+                                    "null"
+                                ]
+                            },
+                            "vis_km": {
+                                "type": "string"
+                            },
+                            "weather": {
+                                "type": "string"
+                            },
+                            "wind_dir": {
+                                "type": "string"
+                            },
+                            "wind_spd_kmh": {
+                                "type": [
+                                    "integer",
+                                    "null"
+                                ]
+                            },
+                            "wind_spd_kt": {
+                                "type": [
+                                    "integer",
+                                    "null"
+                                ]
+                            }
+                        },
+                        "required": [
+                            "aifstime_utc",
+                            "air_temp",
+                            "apparent_t",
+                            "cloud",
+                            "cloud_base_m",
+                            "cloud_oktas",
+                            "cloud_type",
+                            "cloud_type_id",
+                            "delta_t",
+                            "dewpt",
+                            "gust_kmh",
+                            "gust_kt",
+                            "history_product",
+                            "lat",
+                            "local_date_time",
+                            "local_date_time_full",
+                            "lon",
+                            "name",
+                            "press",
+                            "press_msl",
+                            "press_qnh",
+                            "press_tend",
+                            "rain_trace",
+                            "rel_hum",
+                            "sea_state",
+                            "sort_order",
+                            "swell_dir_worded",
+                            "swell_height",
+                            "swell_period",
+                            "vis_km",
+                            "weather",
+                            "wind_dir",
+                            "wind_spd_kmh",
+                            "wind_spd_kt",
+                            "wmo"
+                        ]
+                    }
+                }
+            },
+            "required": [
+                "data",
+                "header",
+                "notice"
+            ]
+        }
+    },
+    "required": [
+        "observations"
+    ]
+}

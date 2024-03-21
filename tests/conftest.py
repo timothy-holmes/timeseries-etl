@@ -7,9 +7,9 @@ def pytest_sessionfinish(session, exitstatus):
     """
     import os
 
-    for file in os.listdir("./tests/data/"):
+    for file in os.listdir("./tests/test_data/"):
         if file.endswith("-temp.db"):
-            os.remove("./tests/data/" + file)
+            os.remove("./tests/test_data/" + file)
 
 
 def pytest_addoption(parser):

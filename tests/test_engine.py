@@ -13,7 +13,7 @@ def temp_tinyflux_path():
     r = "".join(random.choices(string.ascii_lowercase + string.digits, k=8))
 
     class Config:
-        TINYFLUX_PATH = f"./tests/data/{r}-temp.db"
+        TINYFLUX_PATH = f"./tests/test_data/{r}-temp.db"
 
     return Config
 
