@@ -46,7 +46,7 @@ config = {
         "console": {
             "class": "logging.StreamHandler",
             "formatter": "brief",
-            "level": "INFO",
+            "level": "DEBUG",
             "filters": [],
             "stream": "ext://sys.stdout",
         },
@@ -75,15 +75,25 @@ config = {
         #     }
         # },
     },
+    "loggers": {
+        "app_logger": {
+            "handlers": [
+                "console",
+                "file",
+                # "email"
+            ],
+            "level": "DEBUG",  # parent level -> handler level hierarchy (logger is gatekeeper, but doesn't override)
+        }
+    },
     "root": {
         "handlers": [
-            "console",
-            "file",
+            # "console",
+            # "file",
             # "email"
         ],
-        "level": "DEBUG",  # parent level -> handler level hierarchy (logger is gatekeeper, but doesn't override)
+        "level": "ERROR",  # parent level -> handler level hierarchy (logger is gatekeeper, but doesn't override)
     },
 }
 
 logging.config.dictConfig(config)
-log = logging.getLogger("root")
+log = logging.getLogger("app_logger")
