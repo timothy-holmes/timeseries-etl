@@ -26,7 +26,9 @@ class P110Client:
         return response.value.get("time_diff")
 
     def get_point(self):
-        return self._power_to_point(current_power=self._get_p110_power())
+        return self._power_to_point(
+            current_power=self._get_p110_power()
+        )
 
     def _power_to_point(self, current_power):
         return Point(
