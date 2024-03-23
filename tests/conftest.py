@@ -2,6 +2,7 @@ from typing import Callable
 
 import pytest
 
+
 def pytest_sessionfinish(session, exitstatus):
     """
     After tests are run clean up ./tests/data/ folder
@@ -32,12 +33,15 @@ def pytest_addoption(parser):
 
 
 @pytest.fixture(scope="session")
-def mock_log() -> Callable[[str], object]: #logging.Logger
+def mock_log() -> Callable[[str], object]:  # logging.Logger
     def return_none(*args, **kwargs):
         """Ignores all arguments and returns None."""
         return None
 
     class MyClass(object):
+        def __init__(self, *args, **kwargs):
+            pass
+
         def __getattr__(self, attrname):
             """Handles lookups of attributes that aren't found through the normal lookup."""
             return return_none

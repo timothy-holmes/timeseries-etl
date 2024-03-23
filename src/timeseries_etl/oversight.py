@@ -99,15 +99,30 @@ logging.config.dictConfig(config)
 
 
 def configured_logger(name: str) -> logging.Logger:
-    logging.getLogger('not_root')
-    logging.name = name
-    
-    h = config.get('handlers', {}).get('file', {}).copy()
-    h['filename'] = h['filename'].format(name=name)
-    logging.addHandler(
-        logging.handlers.TimedRotatingFileHandler(
-            **h
-        )
+    logger = logging.getLogger("not_root")
+    logger.name = name
+
+    h_dict = config.get("handlers", {}).get("file", {}).copy()
+    h_dict["filename"] = h_dict["filename"].format(name=name)
+    h_obj = logging.handlers.TimedRotatingFileHandler(
+        filename=h_dict["filename"].format(name=name),
+        when=h_dict["when"],
+        backupCount=h_dict["backupCount"],
+        # encoding=h_dict.get('encoding', None),
+        # delay=h_dict.get('delay', False),
+        # utc=h_dict.get('utc', False),
+        # atTime=h_dict.get('atTime', None),
     )
 
-    return logging.getLogger(name)
+    f_dict = config.get("formatters", {}).get("precise", {}).copy()
+    f_obj = logging.Formatter(
+        fmt=f_dict.get("format", None),
+        datefmt=f_dict.get("datefmt", None),
+        style=f_dict.get("style", None),
+        validate=True,
+    )
+
+    h_obj.setFormatter(f_obj)
+    logger.addHandler(h_obj)
+
+    return logger
