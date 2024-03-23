@@ -2,7 +2,7 @@ import time
 
 import schedule
 
-from timeseries_etl.oversight import log
+from timeseries_etl.oversight import configured_logger
 from timeseries_etl.workers.tsdb_engine import Engine, EngineMaintenance
 from timeseries_etl.workers.sched import ScheduleWorker
 from timeseries_etl.clients.bom_etl import ExtractorBOM
@@ -17,6 +17,7 @@ from timeseries_etl.config import (
 
 def main():
     # workers
+    log = configured_logger(__name__)
     log.info('Starting "timeseries_etl"')
 
     with (

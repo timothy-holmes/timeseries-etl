@@ -2,12 +2,13 @@ from typing import Callable
 from queue import Queue, Empty
 import threading
 import logging
+from typing import Callable
 
 
 class ScheduleWorker:
-    def __init__(self, config, log: logging.Logger):
+    def __init__(self, config, log: Callable[[str], logging.Logger]):
         # self._config = config
-        self._log = log
+        self._log = log(__name__)
         self._worker_thread = None
         self._exit_worker = False
         self._queue = Queue()

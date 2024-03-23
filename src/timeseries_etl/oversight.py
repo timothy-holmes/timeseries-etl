@@ -51,7 +51,7 @@ config = {
             "stream": "ext://sys.stdout",
         },
         "file": {
-            "class": "logging.handlers.RotatingFileHandler",
+            "class": "logging.handlers.TimedRotatingFileHandler",
             "formatter": "precise",
             "level": "DEBUG",
             "filename": "./logs/my-first-log.log",
@@ -76,7 +76,7 @@ config = {
         # },
     },
     "loggers": {
-        "app_logger": {
+        "": {
             "handlers": [
                 "console",
                 "file",
@@ -96,4 +96,6 @@ config = {
 }
 
 logging.config.dictConfig(config)
-log = logging.getLogger("app_logger")
+
+def configured_logger(name: str) -> logging.Logger:
+    return logging.getLogger(name)

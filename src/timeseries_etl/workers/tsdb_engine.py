@@ -6,13 +6,14 @@ from datetime import datetime
 from typing import Sequence
 import shutil
 import logging
+from typing import Callable
 
 from tinyflux import TinyFlux, Point
 
 
 class Engine:
-    def __init__(self, config, log: logging.Logger):
-        self._log = log
+    def __init__(self, config, log: Callable[[str], logging.Logger]):
+        self._log = log(__name__)
         self._tinyflux_path = config.TINYFLUX_PATH
         self._worker_thread = None
         self._exit_worker = False

@@ -1,6 +1,7 @@
 import datetime
 import threading
 import logging
+from typing import Callable
 
 import requests
 from tinyflux import Point
@@ -9,10 +10,10 @@ from timeseries_etl.clients.request import get_adapter
 
 
 class ExtractorBOM:
-    def __init__(self, config, log: logging.Logger) -> None:
+    def __init__(self, config, log: Callable[[str], logging.Logger]) -> None:
         self._sites = config.SITES
         self._adapter = get_adapter(config)
-        self._log = log
+        self._log = log(__name__)
 
     def _get_site_obs(self, url, to_list) -> None:
         try:

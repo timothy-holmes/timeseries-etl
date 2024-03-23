@@ -1,5 +1,6 @@
 import asyncio
 from datetime import datetime, timedelta
+from typing import Callable
 import logging
 
 from plugp100.api.tapo_client import TapoClient
@@ -8,11 +9,11 @@ from tinyflux import Point
 
 
 class P110Client:
-    def __init__(self, config, log: logging.Logger):
+    def __init__(self, config, log: Callable[[str], logging.Logger]):
         self._tapo_ip = config.TAPO_ADDRESS
         self._credentials = AuthCredential(config.TAPO_USERNAME, config.TAPO_PASSWORD)
         self._time_diff = self._get_time_diff()
-        self._log = log
+        self._log = log(__name__)
 
     def _get_p110_power(self):
         tapo = TapoClient.create(self._credentials, self._tapo_ip)
