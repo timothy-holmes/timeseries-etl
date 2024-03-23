@@ -54,9 +54,9 @@ config = {
             "class": "logging.handlers.TimedRotatingFileHandler",
             "formatter": "precise",
             "level": "DEBUG",
-            "filename": "./logs/my-first-log.log",
-            "maxBytes": 1024,
-            "backupCount": 3,
+            "filename": "./logs/{name}.log",
+            "when": "midnight",
+            "backupCount": 7,
         },
         # "email": {
         #     "class": "email_handler.SSLEmailHandler",
@@ -76,10 +76,10 @@ config = {
         # },
     },
     "loggers": {
-        "": {
+        "not_root": {
             "handlers": [
                 "console",
-                "file",
+                # "file",
                 # "email"
             ],
             "level": "DEBUG",  # parent level -> handler level hierarchy (logger is gatekeeper, but doesn't override)
@@ -97,5 +97,17 @@ config = {
 
 logging.config.dictConfig(config)
 
+
 def configured_logger(name: str) -> logging.Logger:
+    logging.getLogger('not_root')
+    logging.name = name
+    
+    h = config.get('handlers', {}).get('file', {}).copy()
+    h['filename'] = h['filename'].format(name=name)
+    logging.addHandler(
+        logging.handlers.TimedRotatingFileHandler(
+            **h
+        )
+    )
+
     return logging.getLogger(name)

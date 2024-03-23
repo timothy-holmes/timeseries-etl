@@ -1,5 +1,6 @@
-import pytest
+from typing import Callable
 
+import pytest
 
 def pytest_sessionfinish(session, exitstatus):
     """
@@ -31,7 +32,7 @@ def pytest_addoption(parser):
 
 
 @pytest.fixture(scope="session")
-def mock_log():
+def mock_log() -> Callable[[str], object]: #logging.Logger
     def return_none(*args, **kwargs):
         """Ignores all arguments and returns None."""
         return None
@@ -41,4 +42,4 @@ def mock_log():
             """Handles lookups of attributes that aren't found through the normal lookup."""
             return return_none
 
-    return MyClass()
+    return MyClass
