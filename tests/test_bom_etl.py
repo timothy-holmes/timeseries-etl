@@ -1,9 +1,9 @@
 import json
 
-import pytest
-import responses
 import genson
+import pytest
 import requests
+import responses as responses_test
 from tinyflux import Point
 
 from timeseries_etl.clients.bom_etl import ExtractorBOM
@@ -34,11 +34,11 @@ def extractor(sites, mock_log):
 
 
 @pytest.fixture
-def register_responses(sites):
-    with responses.RequestsMock() as mock:
+def register_response(sites):
+    with responses_test.RequestsMock() as mock:
         for site in sites:
             mock.add(
-                method=responses.GET,
+                method=responses_test.GET,
                 url=site["url"],
                 content_type="application/json",
                 json=json.load(open("tests/test_data/bom/excerpt.json")),
@@ -46,10 +46,10 @@ def register_responses(sites):
         yield mock
 
 
-@responses.activate
+@responses_test.activate
 def test_get_site_obs(extractor):
-    responses.add(
-        responses.GET,
+    responses_test.add(
+        responses_test.GET,
         "http://test_url/little-data",
         json={
             "observations": {
@@ -68,7 +68,7 @@ def test_ob_to_point(extractor, single_observation):
     assert point.fields["rel_hum"] == 60
 
 
-def test_get_points(extractor, register_responses):
+def test_get_points(extractor, register_response):
     points = extractor.get_points()
     assert isinstance(points, list)
     assert len(points) == 40
