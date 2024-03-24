@@ -33,7 +33,7 @@ dev = [
 [tool.pytest.ini_options]
 addopts = [
     "--import-mode=importlib",
-    "--html=./tests/report.html",
+    "--html=./tests/test_data/report.html",
     "--self-contained-html"
 ]
 pythonpath = "src"
@@ -75,4 +75,4 @@ source = ["src"]
 # ignore_errors = true
 
 # [tool.coverage.html]
-# directory = "tests/coverage_html"
+# directory = "tests/test_data/coverage_html"

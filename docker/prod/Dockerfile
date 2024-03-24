@@ -59,4 +59,4 @@ ARG TAPO_PASS
 ENV TAPO_PASSWORD $TAPO_PASS
 
 # copy report from tests to enforce dependency on tests stage
-COPY --from=tests /app/tests/report.html /app/test_report.html
+COPY --from=tests /app/tests/test_data/report.html /app/test_report.html
