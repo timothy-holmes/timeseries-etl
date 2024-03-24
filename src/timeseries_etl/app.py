@@ -22,12 +22,14 @@ def bom_job(bom_service, engine_service):
     for p in bom_service.get_points():
         engine_service.insert(p)
 
+
 def p110_job(p110_service, engine_service):
     for p in p110_service.get_point():
         engine_service.insert(p)
 
+
 def start_up(log):
-    log.info('Running start-up job')
+    log.info("Running start-up job")
     return schedule.CancelJob
 
 
@@ -45,7 +47,9 @@ def main():
         p110 = P110Client(config=P110Config, log=configured_logger)
 
         near_future = (datetime.now() + timedelta(seconds=60)).strftime("%H:%M:%S")
-        schedule.every(1).days.at("12:00").do(bom_job,bom_service=bom, engine_service=engine)
+        schedule.every(1).days.at("12:00").do(
+            bom_job, bom_service=bom, engine_service=engine
+        )
         schedule.every(1).days.at("13:00").do(engine_maintenance.run)
         schedule.every(1).minutes.do(p110_job, p110_service=p110, engine_service=engine)
         schedule.every().day.at(near_future).do(start_up, log=log)

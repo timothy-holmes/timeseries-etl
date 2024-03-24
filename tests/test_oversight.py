@@ -4,12 +4,9 @@ from timeseries_etl.oversight import configured_logger, config
 
 
 def patch_log():  # not thread-safe
-    name = 'test_log'
+    name = "test_log"
     log_file = (
-        config.get("handlers", {})
-        .get("file", {})
-        .get("filename")
-        .format(name=name)
+        config.get("handlers", {}).get("file", {}).get("filename").format(name=name)
     )
 
     old_contents = []

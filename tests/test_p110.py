@@ -23,5 +23,5 @@ def test_power_to_point(new_p110):
 
 def test_get_point(new_p110):
     point = new_p110.get_point()
-    assert point, 'P110 get_point response is empty'
+    assert point, "P110 get_point response is empty"
     assert type(point) is Point

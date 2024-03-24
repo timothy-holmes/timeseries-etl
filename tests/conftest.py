@@ -58,9 +58,9 @@ def mock_app_engine() -> Callable[[str], object]:  # Engine
         def __init__(self, log, *args, **kwargs):
             self.log = log
             self.queue = []
-        
+
         def insert(self, *args, **kwargs):
-            self.log.info(f'Added to engine {(args, kwargs)}')
+            self.log.info(f"Added to engine {(args, kwargs)}")
             self.queue.append((args, kwargs))
             print(args, kwargs)
 
@@ -79,15 +79,15 @@ def mock_bom() -> Callable[[str], object]:  # Engine
     class MyClass(object):
         def __init__(self, log, *args, **kwargs):
             self.log = log
-        
+
         def get_points(self, *args, **kwargs):
             result = [
-                {'random BOM point1': 'random value1'},
-                {'random BOM point2': 'random value2'}
+                {"random BOM point1": "random value1"},
+                {"random BOM point2": "random value2"},
             ]
-            self.log.critical(f'Extracted by BOM {result}')
+            self.log.critical(f"Extracted by BOM {result}")
             return result
-        
+
         def __getattr__(self, attrname):
             """
             Handles lookups of attributes that aren't
@@ -103,12 +103,12 @@ def mock_p110() -> Callable[[str], object]:  # Engine
     class MyClass(object):
         def __init__(self, log, *args, **kwargs):
             self.log = log
-        
+
         def get_point(self, *args, **kwargs):
-            result = {'random P110 point1': 'random value1'}
-            self.log.error(f'Extracted by P110 {result}')
+            result = {"random P110 point1": "random value1"}
+            self.log.error(f"Extracted by P110 {result}")
             return result
-        
+
         def __getattr__(self, attrname):
             """
             Handles lookups of attributes that aren't
