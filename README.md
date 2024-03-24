@@ -10,7 +10,8 @@ Exhaustive data pipeline for projects. Integates self-hosted healthchecks/job no
 Build and start container (if not running already):
 
 ```sh
-    docker-compose -f ./docker/dev/docker-compose.yml build && \
+    TAPO_PASSWORD=**** \
+    docker-compose -f ./docker/dev/docker-compose.yml build --build-args t_p=$TAPOPASSWORD && \
     docker-compose -f ./docker/dev/docker-compose.yml up -d
 ```
 
@@ -18,14 +19,15 @@ Build and start container (if not running already):
 - open bash inside container: 
     `docker exec -it ts-etl-dev bash`
 - run commands inside container when required:
-    `docker exec -t ts-etl-dev pytest`
+    `TAPO_PASSWORD= docker exec -t ts-etl-dev pytest`
 
 ### Production
 
 Build and start container:
 
 ```sh
-    docker-compose -f ./docker/prod/docker-compose.yml build && \
+    TAPO_PASSWORD=**** \
+    docker-compose -f ./docker/prod/docker-compose.yml build --build-args t_p=$TAPOPASSWORD && \
     docker-compose -f ./docker/prod/docker-compose.yml up -d
 ```
 
