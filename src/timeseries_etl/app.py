@@ -24,12 +24,12 @@ def bom_job(bom_service, engine_service):
 
 
 def p110_job(p110_service, engine_service):
-    for p in p110_service.get_point():
-        engine_service.insert(p)
+    engine_service.insert(p110_service.get_point())
 
 
 def start_up(log):
-    log.info("Running start-up job")
+    this_log = log('start_up')
+    this_log.info("Running start-up job")
     return schedule.CancelJob
 
 
@@ -63,3 +63,7 @@ def main():
                 time.sleep(1)
         except KeyboardInterrupt:
             log.info("keyboard press -> exiting gracefully")
+        except Exception as e:
+            log.error(f"encountered exception: {e}")
+        finally:
+            log.info('"timeseries_etl" stopped')

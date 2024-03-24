@@ -81,22 +81,28 @@ class Engine:
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
+        if exc_type or exc_val or exc_tb:
+            self._log.error(
+                f"encountered exception: {exc_type} {exc_val} {exc_tb}"
+            )
         self.stop_worker()
 
 
 class EngineMaintenance:
-    def __init__(self, engine: Engine):
+    def __init__(self, engine: Engine, log: Callable[[str], logging.Logger]):
         self._engine = engine
+        self._log = log(__name__)
 
     def run(self):
         self._engine.stop_worker()
+
         if os.path.exists(self._engine._tinyflux_path):
-            self._backup()
+            backup_path = self._backup()
+            self._log.info(f"backed up TFDB to {backup_path}")
+
         self._engine.start_worker()
 
     def _backup(self):
-        shutil.copyfile(
-            self._engine._tinyflux_path,
-            self._engine._tinyflux_path
-            + f'.bak-{datetime.now().strftime("%Y%m%d%H%M%S")}',
-        )
+        backup_path = self._engine._tinyflux_path + f'.bak-{datetime.now().strftime("%Y%m%d%H%M%S")}'
+        shutil.copyfile(self._engine._tinyflux_path, backup_path)
+        return backup_path

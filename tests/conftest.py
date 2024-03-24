@@ -1,4 +1,6 @@
 from typing import Callable
+import random
+import string
 
 import pytest
 
@@ -31,6 +33,14 @@ def pytest_addoption(parser):
         help="(custom) enable long tests",
     )
 
+@pytest.fixture(scope="session")
+def temp_tinyflux_path():
+    r = "".join(random.choices(string.ascii_lowercase + string.digits, k=8))
+
+    class Config:
+        TINYFLUX_PATH = f"./tests/test_data/{r}-temp.db"
+
+    return Config
 
 @pytest.fixture(scope="session")
 def mock_log() -> Callable[[str], object]:  # logging.Logger
@@ -38,7 +48,7 @@ def mock_log() -> Callable[[str], object]:  # logging.Logger
         """Ignores all arguments and returns None."""
         print(args, kwargs)
 
-    class MyClass(object):
+    class MockLog(object):
         def __init__(self, *args, **kwargs):
             pass
 
@@ -49,14 +59,14 @@ def mock_log() -> Callable[[str], object]:  # logging.Logger
             """
             return return_none
 
-    return MyClass
+    return MockLog
 
 
 @pytest.fixture(scope="session")
 def mock_app_engine() -> Callable[[str], object]:  # Engine
-    class MyClass(object):
+    class MockAppEngine(object):
         def __init__(self, log, *args, **kwargs):
-            self.log = log
+            self.log = log()
             self.queue = []
 
         def insert(self, *args, **kwargs):
@@ -71,14 +81,14 @@ def mock_app_engine() -> Callable[[str], object]:  # Engine
             """
             return None
 
-    return MyClass
+    return MockAppEngine
 
 
 @pytest.fixture(scope="session")
 def mock_bom() -> Callable[[str], object]:  # Engine
-    class MyClass(object):
+    class MockBOM(object):
         def __init__(self, log, *args, **kwargs):
-            self.log = log
+            self.log = log()
 
         def get_points(self, *args, **kwargs):
             result = [
@@ -95,14 +105,14 @@ def mock_bom() -> Callable[[str], object]:  # Engine
             """
             raise NotImplementedError
 
-    return MyClass
+    return MockBOM
 
 
 @pytest.fixture(scope="session")
 def mock_p110() -> Callable[[str], object]:  # Engine
-    class MyClass(object):
+    class MockP110(object):
         def __init__(self, log, *args, **kwargs):
-            self.log = log
+            self.log = log()
 
         def get_point(self, *args, **kwargs):
             result = {"random P110 point1": "random value1"}
@@ -116,4 +126,4 @@ def mock_p110() -> Callable[[str], object]:  # Engine
             """
             raise NotImplementedError
 
-    return MyClass
+    return MockP110

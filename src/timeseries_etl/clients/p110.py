@@ -16,14 +16,27 @@ class P110Client:
         self._log = log(__name__)
 
     def _get_p110_power(self):
-        tapo = TapoClient.create(self._credentials, self._tapo_ip)
-        response = asyncio.run(tapo.get_current_power())
-        return response.value.current_power
+        # get device info
+        try:
+            tapo = TapoClient.create(self._credentials, self._tapo_ip)
+            response = asyncio.run(tapo.get_current_power())
+            current_power = response.value.current_power
+        except Exception as e:
+            self._log.error(e)
+            return 0
+        else:
+            return current_power
 
     def _get_time_diff(self):
-        tapo = TapoClient.create(self._credentials, self._tapo_ip)
-        response = asyncio.run(tapo.get_device_info())
-        return response.value.get("time_diff")
+        try:
+            tapo = TapoClient.create(self._credentials, self._tapo_ip)
+            response = asyncio.run(tapo.get_device_info())
+            time_diff = response.value.get("time_diff")
+        except Exception as e:
+            self._log.error(e)
+            return 0
+        else:
+            return time_diff
 
     def get_point(self):
         return self._power_to_point(current_power=self._get_p110_power())

@@ -1,7 +1,6 @@
 from datetime import datetime, timedelta
 import time
 import random
-import string
 
 import pytest
 from tinyflux import Point
@@ -9,26 +8,17 @@ from tinyflux import Point
 from timeseries_etl.workers.tsdb_engine import Engine
 
 
-def temp_tinyflux_path():
-    r = "".join(random.choices(string.ascii_lowercase + string.digits, k=8))
-
-    class Config:
-        TINYFLUX_PATH = f"./tests/test_data/{r}-temp.db"
-
-    return Config
-
-
 @pytest.fixture
-def mock_engine(mock_log):
-    return Engine(temp_tinyflux_path(), log=mock_log)
+def mock_engine(temp_tinyflux_path, mock_log):
+    return Engine(temp_tinyflux_path, log=mock_log)
 
 
-def test_temp_db_path():
-    path = temp_tinyflux_path().TINYFLUX_PATH
+def test_temp_db_path(temp_tinyflux_path):
+    path = temp_tinyflux_path.TINYFLUX_PATH
     assert path.endswith("-temp.db")
     assert path.startswith("./tests/test_data/")
     assert len(path) == 8 + len("./tests/test_data/") + len("-temp.db")
-    assert path != temp_tinyflux_path()
+    assert path != temp_tinyflux_path
 
 
 def test_worker_starts_and_stops(mock_engine):
@@ -68,14 +58,14 @@ def test_insert_and_queue_size(mock_engine):
 @pytest.mark.skipif(
     "not config.getoption('longtest')", reason="need --longtest option to run"
 )
-def test_performance(mock_log):
+def test_performance(temp_tinyflux_path, mock_log):
     # wait until end of other tests
     time.sleep(10)
     num_points = 1000
 
     # setup timing
     prework_start = time.time()
-    with Engine(temp_tinyflux_path(), log=mock_log) as engine:
+    with Engine(temp_tinyflux_path, log=mock_log) as engine:
         prework_result = time.time() - prework_start
 
         # create random points
@@ -103,8 +93,8 @@ def test_performance(mock_log):
     ), f"TinyFlux engine not fast enough inserting {num_points} points"
 
 
-def test_context_implementation(mock_log):
-    with Engine(temp_tinyflux_path(), log=mock_log) as engine:
+def test_context_implementation(temp_tinyflux_path, mock_log):
+    with Engine(temp_tinyflux_path, log=mock_log) as engine:
         assert engine._is_worker_alive() is True
 
     assert engine._is_worker_alive() is False
