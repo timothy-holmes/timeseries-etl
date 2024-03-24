@@ -6,7 +6,9 @@ services:
         build:
             context: ../../
             dockerfile: ./docker/prod/Dockerfile
+            target: prod
         volumes:
             - ../../data:/app/data
+            - ../../logs:/app/logs
         command: bash -c "python /app/src/run.py"
 

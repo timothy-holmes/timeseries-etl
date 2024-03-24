@@ -17,24 +17,28 @@ version = "0.0.1"
 [project.optional-dependencies]
 dev = [
     "pytest",
+    "pytest-asyncio",
+    "pytest-html",
+    "pylint",
     "black",
     "flake8",
     "flake8-black",
     "flake8-pyproject",
-    "pytest-cov",
-    "pytest-asyncio",
-    "coverage",
+    # "pytest-cov",
+    # "coverage",
     "genson",
     "responses==0.25.0",
-    "pylint",
 ]
 
 [tool.pytest.ini_options]
 addopts = [
-    "--import-mode=importlib"
+    "--import-mode=importlib",
+    "--html=report.html",
+    "--self-contained-html"
 ]
 pythonpath = "src"
 asyncio_mode= "auto"
+generate_report_on_test = true
 
 [tool.flake8]
 max-line-length = 88
@@ -43,3 +47,32 @@ exclude = "./build"
 
 [tool.black]
 # no need for exclude (uses gitignore)
+
+[tool.isort]
+profile = "black"
+
+[tool.coverage.run]
+source = ["src"]
+
+# [tool.coverage.report]
+# # Regexes for lines to exclude from consideration
+# exclude_also = [
+#     # Don't complain about missing debug-only code:
+#     "def __repr__",
+#     "if self\\.debug",
+
+#     # Don't complain if tests don't hit defensive assertion code:
+#     "raise AssertionError",
+#     "raise NotImplementedError",
+
+#     # Don't complain if non-runnable code isn't run:
+#     "if 0:",
+#     "if __name__ == .__main__.:",
+
+#     # Don't complain about abstract methods, they aren't run:
+#     "@(abc\\.)?abstractmethod",
+#     ]
+# ignore_errors = true
+
+# [tool.coverage.html]
+# directory = "tests/coverage_html"
