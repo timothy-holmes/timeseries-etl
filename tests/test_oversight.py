@@ -4,28 +4,27 @@ from timeseries_etl.oversight import configured_logger, config
 
 
 def patch_log():  # not thread-safe
+    name = 'test_log'
     log_file = (
         config.get("handlers", {})
         .get("file", {})
         .get("filename")
-        .format(name="test_log")
+        .format(name=name)
     )
 
-    og_contents = []
+    old_contents = []
     new_contents = []
 
     # save existing log file
     if os.path.isfile(log_file):
-        og_contents = open(log_file, "r").readlines()
-    yield configured_logger("test_log")
+        old_contents = open(log_file, "r").readlines()
+    yield configured_logger(name)
 
     # get new contents
     if os.path.isfile(log_file):
         new_contents = open(log_file, "r").readlines()
 
-    # return original contents
-    if os.path.isfile(log_file):
-        open(log_file, "w").writelines(og_contents)
+    yield old_contents
     yield new_contents
 
 
@@ -39,7 +38,9 @@ def test_logging():
     log.error("hello")
     log.critical("hello")
 
-    log_contents = next(log_contents)
-    hellos = [entry.split(" | ")[-1].strip() for entry in log_contents]
+    old_log_contents = next(log_contents)
+    new_log_contents = next(log_contents)
+    old_hellos = [entry.split(" | ")[-1].strip() for entry in old_log_contents]
+    new_hellos = [entry.split(" | ")[-1].strip() for entry in new_log_contents]
 
-    assert hellos == ["hello"] * 5
+    assert new_hellos == old_hellos + ["hello"] * 5

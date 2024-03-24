@@ -1,4 +1,5 @@
 import pytest
+from tinyflux import Point
 
 import timeseries_etl.clients.p110
 from timeseries_etl.config import P110Config
@@ -21,4 +22,6 @@ def test_power_to_point(new_p110):
 
 
 def test_get_point(new_p110):
-    assert new_p110.get_point()
+    point = new_p110.get_point()
+    assert point, 'P110 get_point response is empty'
+    assert type(point) is Point

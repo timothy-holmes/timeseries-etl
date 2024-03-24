@@ -1,5 +1,6 @@
 import logging
-import logging.config
+import logging.handlers
+# import logging.config
 
 config = {
     "version": 1,
@@ -96,15 +97,15 @@ config = {
     },
 }
 
-logging.config.dictConfig(config)
-
+# logging.config.dictConfig(config)
 
 def configured_logger(name: str) -> logging.Logger:
-    logger = logging.getLogger("not_root")
-    logger.name = name
+    print(name)
+    logger = logging.getLogger(name)
+    logger.setLevel("DEBUG")
+    logger.propagate = False
 
-    h_dict = config.get("handlers", {}).get("file", {}).copy()
-    h_dict["filename"] = h_dict["filename"].format(name=name)
+    h_dict = config.get("handlers", {}).get("file", {})
     h_obj = logging.handlers.TimedRotatingFileHandler(
         filename=h_dict["filename"].format(name=name),
         when=h_dict["when"],
