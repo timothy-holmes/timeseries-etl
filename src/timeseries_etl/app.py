@@ -46,7 +46,7 @@ def main():
             pass
 
 
-def set_schedule(sched, engine, engine_maintenance, bom, p110):
+def set_schedule(log, sched, engine, engine_maintenance, bom, p110):
     # job functions
     def bom_job(bom_service, engine_service):
         for p in bom_service.get_points():

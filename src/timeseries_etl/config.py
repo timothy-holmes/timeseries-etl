@@ -3,7 +3,7 @@ import json
 
 
 class SchedulerConfig:
-    LOOP_CYCLE_TIME = 1  # seconds
+    LOOP_CYCLE_TIME = 5  # seconds
 
 
 class EngineConfig:

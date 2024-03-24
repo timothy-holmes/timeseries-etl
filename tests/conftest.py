@@ -43,7 +43,10 @@ def mock_log() -> Callable[[str], object]:  # logging.Logger
             pass
 
         def __getattr__(self, attrname):
-            """Handles lookups of attributes that aren't found through the normal lookup."""
+            """
+            Handles lookups of attributes that aren't
+            found through the normal lookup - all of them.
+            """
             return return_none
 
     return MyClass

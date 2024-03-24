@@ -1,7 +1,5 @@
 import os.path
 
-import pytest
-
 from timeseries_etl.oversight import configured_logger, config
 
 

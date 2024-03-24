@@ -82,7 +82,8 @@ config = {
                 # "file",
                 # "email"
             ],
-            "level": "DEBUG",  # parent level -> handler level hierarchy (logger is gatekeeper, but doesn't override)
+            # parent level -> handler level hierarchy
+            "level": "DEBUG",
         }
     },
     "root": {
@@ -91,7 +92,7 @@ config = {
             # "file",
             # "email"
         ],
-        "level": "ERROR",  # parent level -> handler level hierarchy (logger is gatekeeper, but doesn't override)
+        "level": "ERROR",
     },
 }
 

@@ -2,7 +2,6 @@ from typing import Callable
 from queue import Queue, Empty
 import threading
 import logging
-from typing import Callable
 
 
 class ScheduleWorker:
