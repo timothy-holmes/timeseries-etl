@@ -40,7 +40,7 @@ def test_init(mock_engine_maintenance):
 def test_backup(mock_engine_maintenance):
     backup_path = mock_engine_maintenance._backup()
     assert len(backup_path) > len(mock_engine_maintenance._engine._tinyflux_path)
-    assert backup_path.split(".")[-1].startswith(".bak")
+    assert backup_path.split(".")[-1].startswith("bak")
     assert backup_path.startswith(mock_engine_maintenance._engine._tinyflux_path)
 
 def test_run(mock_engine_maintenance):
