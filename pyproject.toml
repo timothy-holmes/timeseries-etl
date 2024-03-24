@@ -10,7 +10,7 @@ dependencies = [
     "schedule==1.2.1",
     "requests==2.31.0",
     "tinyflux==0.4.1",
-    "plugp100==4.0.3"
+    "plugp100@git+https://github.com/timothy-holmes/plugp100.git"
 ]
 version = "0.0.1"
 
