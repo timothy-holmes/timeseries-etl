@@ -13,6 +13,14 @@ FROM python:3.11 as base
 WORKDIR /app
 COPY --from=pip_compile /app/requirements.txt requirements.txt
 RUN pip install -r requirements.txt
+# dev/prod Dockerfile, same to here
+
+FROM base as prod
+ENV TAPO_PASSWORD $t_p
+
+WORKDIR /app
+COPY ./src src
+COPY ./config config
 
 # install extra dev deps
 FROM base as tests
@@ -22,7 +30,6 @@ RUN pip install -r dev-requirements.txt
 
 ARG TAPO_PASS
 ENV TAPO_PASSWORD=$TAPO_PASS
-# dev/prod Dockerfile, same to here
 
 WORKDIR /app
 COPY ./config config
@@ -30,12 +37,6 @@ COPY ./src src
 COPY ./tests tests
 
 # run tests (additional parameters required for long-running tests)
+# arg R is random number to block caching pytest
+ARG R
 RUN pytest --longtest --outside
-
-# copy src
-FROM base as prod
-ENV TAPO_PASSWORD $t_p
-
-WORKDIR /app
-COPY ./src src
-COPY ./config config

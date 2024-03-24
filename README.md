@@ -10,7 +10,8 @@ Exhaustive data pipeline for projects. Integates self-hosted healthchecks/job no
 Build and start container (if not running already):
 
 ```sh
-    docker-compose -f ./docker/dev/docker-compose.yml build --build-args TAP0_PASS=*****
+    docker-compose -f ./docker/dev/docker-compose.yml build \ 
+    --build-arg TAP0_PASS=***** && \
     docker-compose -f ./docker/prod/docker-compose.yml up -d
 ```
 
@@ -25,7 +26,9 @@ Build and start container (if not running already):
 Build and start container:
 
 ```sh
-    docker-compose -f ./docker/prod/docker-compose.yml build --build-args TAP0_PASS=***** && \
+    docker-compose -f ./docker/prod/docker-compose.yml build 
+    --build-arg TAP0_PASS=***** \
+    --build-arg R=$RANDOM && \
     docker-compose -f ./docker/prod/docker-compose.yml up -d
 ```
 
