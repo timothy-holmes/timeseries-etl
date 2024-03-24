@@ -16,9 +16,9 @@ def test_init(new_p110):
     assert new_p110._time_diff == 600
 
 
-def test_power_to_point(mock_log):
+def test_power_to_point(new_p110):
     assert new_p110._power_to_point(0)
 
 
-def test_get_point(mock_log):
+def test_get_point(new_p110):
     assert new_p110.get_point()
