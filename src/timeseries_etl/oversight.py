@@ -108,10 +108,12 @@ def configured_logger(name: str) -> logging.Logger:
     logger.propagate = False
 
     h_dict = config.get("handlers", {}).get("file", {})
+    
     if name.startswith('test_'):
-        filename = h_dict["filename"].format(name=name)
-    else:
         filename = "./tests/test_data/logs/{name}.log".format(name=name)
+    else:
+        filename = h_dict["filename"].format(name=name)
+
     h_obj = logging.handlers.TimedRotatingFileHandler(
         filename=filename,
         when=h_dict["when"],
