@@ -1,8 +1,5 @@
-ARG tapo_password
-
 # get two sets of deps in requirements.txt format
 FROM python:3.11 as pip_compile
-
 
 WORKDIR /app
 COPY pyproject.toml pyproject.toml
@@ -12,7 +9,6 @@ RUN pip-compile -o requirements.txt pyproject.toml
 
 # install project deps (standard)
 FROM python:3.11 as base
-ENV TAPO_PASSWORD $tapo_password
 
 WORKDIR /app
 COPY --from=pip_compile /app/requirements.txt requirements.txt
@@ -20,10 +16,13 @@ RUN pip install -r requirements.txt
 
 # install extra dev deps
 FROM base as tests
-ENV TAPO_PASSWORD $tapo_password
 
 COPY --from=pip_compile /app/dev-requirements.txt dev-requirements.txt
 RUN pip install -r dev-requirements.txt
+
+ARG TAPO_PASS
+ENV TAPO_PASSWORD=$TAPO_PASS
+# dev/prod Dockerfile, same to here
 
 WORKDIR /app
 COPY ./config config
@@ -35,7 +34,7 @@ RUN pytest --longtest --outside
 
 # copy src
 FROM base as prod
-ENV TAPO_PASSWORD $tapo_password
+ENV TAPO_PASSWORD $t_p
 
 WORKDIR /app
 COPY ./src src

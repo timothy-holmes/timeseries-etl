@@ -10,9 +10,8 @@ Exhaustive data pipeline for projects. Integates self-hosted healthchecks/job no
 Build and start container (if not running already):
 
 ```sh
-    TAPO_PASSWORD=**** \
-    docker-compose -f ./docker/dev/docker-compose.yml build --build-args t_p=$TAPOPASSWORD && \
-    docker-compose -f ./docker/dev/docker-compose.yml up -d
+    docker-compose -f ./docker/dev/docker-compose.yml build --build-args TAP0_PASS=*****
+    docker-compose -f ./docker/prod/docker-compose.yml up -d
 ```
 
 - enter container using VS Code to attach
@@ -26,8 +25,7 @@ Build and start container (if not running already):
 Build and start container:
 
 ```sh
-    TAPO_PASSWORD=**** \
-    docker-compose -f ./docker/prod/docker-compose.yml build --build-args t_p=$TAPOPASSWORD && \
+    docker-compose -f ./docker/prod/docker-compose.yml build --build-args TAP0_PASS=***** && \
     docker-compose -f ./docker/prod/docker-compose.yml up -d
 ```
 
