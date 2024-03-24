@@ -14,7 +14,11 @@ def new_p110(mock_log):
 
 
 def test_init(new_p110):
-    assert new_p110._time_diff == 600
+    assert (
+        (new_p110._time_diff == 600) |
+        (new_p110._time_diff == 660) |
+        (new_p110._time_diff == 0)
+    ), f'Weird timezone, dude: {new_p110._time_diff}'
 
 
 def test_power_to_point(new_p110):

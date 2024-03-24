@@ -2,7 +2,7 @@ import time
 
 import schedule
 
-from timeseries_etl.app import bom_job, p110_job, start_up
+from timeseries_etl.app import bom_job, p110_job
 
 
 def test_app(mock_app_engine, mock_bom, mock_p110, mock_log):
@@ -15,7 +15,6 @@ def test_app(mock_app_engine, mock_bom, mock_p110, mock_log):
     schedule.every(1).seconds.do(
         p110_job, p110_service=mock_p110(mock_log), engine_service=engine
     )
-    schedule.every(1).seconds.do(start_up, log=mock_log)
     schedule.run_all()  # +3 items, + log entry
 
     try:

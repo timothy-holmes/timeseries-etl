@@ -27,11 +27,6 @@ def p110_job(p110_service, engine_service):
     engine_service.insert(p110_service.get_point())
 
 
-def start_up(log):
-    this_log = log('start_up')
-    this_log.info("Running start-up job")
-    return schedule.CancelJob
-
 
 def main():
     # workers
@@ -46,15 +41,15 @@ def main():
         bom = ExtractorBOM(config=BOMConfig, log=configured_logger)
         p110 = P110Client(config=P110Config, log=configured_logger)
 
-        near_future = (datetime.now() + timedelta(seconds=60)).strftime("%H:%M:%S")
+        schedule.every(1).minutes.do(p110_job, p110_service=p110, engine_service=engine)
+        schedule.run_all(delay_seconds=10)
+    
         schedule.every(1).days.at("12:00").do(
-            bom_job, bom_service=bom, engine_service=engine
+            bom_job, 
+            bom_service=bom, 
+            engine_service=engine
         )
         schedule.every(1).days.at("13:00").do(engine_maintenance.run)
-        schedule.every(1).minutes.do(p110_job, p110_service=p110, engine_service=engine)
-        schedule.every().day.at(near_future).do(start_up, log=log)
-
-        schedule.run_all(delay_seconds=10)
         log.info('"timeseries_etl" running')
 
         try:

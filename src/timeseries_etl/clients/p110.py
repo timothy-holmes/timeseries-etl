@@ -10,10 +10,12 @@ from tinyflux import Point
 
 class P110Client:
     def __init__(self, config, log: Callable[[str], logging.Logger]):
+        self._log = log(__name__)
+        self._log.debug('starting P110Client')
         self._tapo_ip = config.TAPO_ADDRESS
         self._credentials = AuthCredential(config.TAPO_USERNAME, config.TAPO_PASSWORD)
-        self._time_diff = self._get_time_diff()
-        self._log = log(__name__)
+        self._time_diff = self.set_time_diff()
+        self._log.debug('P110Client started')
 
     def _get_p110_power(self):
         # get device info
@@ -27,7 +29,7 @@ class P110Client:
         else:
             return current_power
 
-    def _get_time_diff(self):
+    def set_time_diff(self):
         try:
             tapo = TapoClient.create(self._credentials, self._tapo_ip)
             response = asyncio.run(tapo.get_device_info())
@@ -36,6 +38,8 @@ class P110Client:
             self._log.error(e)
             return 0
         else:
+            self._time_diff = time_diff
+            self._log.debug(f"set time_diff to {time_diff}")
             return time_diff
 
     def get_point(self):
