@@ -7,6 +7,6 @@ services:
             context: ../../
             dockerfile: ./docker/prod/Dockerfile
         volumes:
-            - ../data:/app/data
+            - ../../data:/app/data
         command: bash -c "python /app/src/run.py"
 
