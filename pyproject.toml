@@ -33,7 +33,7 @@ dev = [
 [tool.pytest.ini_options]
 addopts = [
     "--import-mode=importlib",
-    "--html=report.html",
+    "--html=./tests/report.html",
     "--self-contained-html"
 ]
 pythonpath = "src"

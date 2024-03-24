@@ -6,6 +6,7 @@ services:
         build:
             context: ../../
             dockerfile: ./docker/dev/Dockerfile
+            target: dev
         volumes:
             - ../../:/app
         command: bash -c "pip install .[dev] && pip uninstall -y etl_timeseries && tail -f /dev/null"

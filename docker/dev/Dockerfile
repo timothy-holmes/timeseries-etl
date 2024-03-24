@@ -1,4 +1,3 @@
-# get two sets of deps in requirements.txt format
 FROM python:3.11 as pip_compile
 
 WORKDIR /app
@@ -11,15 +10,20 @@ RUN pip-compile -o requirements.txt pyproject.toml
 FROM python:3.11 as base
 
 WORKDIR /app
+
+# copy requirements.txt and install via pip 
 COPY --from=pip_compile /app/requirements.txt requirements.txt
 RUN pip install -r requirements.txt
 
 # install extra dev deps
-FROM base as tests
+FROM base as dev
 
+# copy extra requirements.txt and install via pip 
 COPY --from=pip_compile /app/dev-requirements.txt dev-requirements.txt
 RUN pip install -r dev-requirements.txt
 
+# add required creds
 ARG TAPO_PASS
 ENV TAPO_PASSWORD=$TAPO_PASS
-# dev/prod Dockerfile, same to here
+
+### dev/prod Dockerfile, same to here
